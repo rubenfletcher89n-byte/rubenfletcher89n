@@ -1,4 +1,4 @@
-<h1 align="center">🐉 Gefe / AI Student Developer</h1>
+<h1 align="center">🐉 Ruben Flatcher / AI Student Developer</h1>
 
 ##
 
