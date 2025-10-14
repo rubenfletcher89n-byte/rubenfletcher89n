@@ -2,7 +2,7 @@ name: Generate Snake
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Ejecuta todos los días a medianoche
+    - cron: "0 0 * * *"  # Corre todos los días a medianoche
   workflow_dispatch:
 
 jobs:
@@ -13,19 +13,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate the snake animation
-        uses: Platane/snk@v3
+      - name: Generate snake animation
+        uses: Platane/snk/svg-only@v3
         with:
           github_user_name: rubenfletcher89n-byte
           outputs: dist/github-contribution-grid-snake.svg
 
-      - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v3
-        with:
-          target_branch: output
-          build_dir: dist
+      - name: Push to output branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan output
+          git reset
+          mkdir -p dist
+          cp dist/github-contribution-grid-snake.svg ./github-contribution-grid-snake.svg
+          git add github-contribution-grid-snake.svg
+          git commit -m "Generate snake"
+          git push --force https://x-access-token:${TOKEN}@github.com/rubenfletcher89n-byte/rubenfletcher89n-byte.git output
 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
